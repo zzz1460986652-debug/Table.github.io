@@ -1,0 +1,662 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plant Single-Cell Research Reference Table</title>
+  <style>
+    :root {
+      --bg: #f7f7f4;
+      --paper: #ffffff;
+      --paper-soft: #fcfcfa;
+      --ink: #181814;
+      --ink-soft: #4a4a43;
+      --muted: #6d6d66;
+      --line: #d8d7d0;
+      --line-strong: #bdbcb4;
+      --accent: #1f5a96;
+      --accent-soft: #e9f1f8;
+      --shadow: 0 8px 24px rgba(20, 20, 18, 0.05);
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --serif: "Georgia", "Times New Roman", serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--sans);
+      color: var(--ink);
+      background: linear-gradient(180deg, #f4f4f1 0%, #f7f7f4 100%);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .wrap {
+      max-width: 1520px;
+      margin: 0 auto;
+      padding: 28px 20px 42px;
+    }
+
+    .hero {
+      margin-bottom: 18px;
+      padding: 22px 0 18px;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .eyebrow {
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      max-width: 980px;
+      font-family: var(--serif);
+      font-size: clamp(30px, 4vw, 42px);
+      font-weight: 700;
+      line-height: 1.14;
+      letter-spacing: -0.01em;
+    }
+
+    .hero p {
+      max-width: 920px;
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 15px;
+      line-height: 1.72;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0;
+      margin-bottom: 18px;
+      border-top: 1px solid var(--line-strong);
+      border-bottom: 1px solid var(--line-strong);
+    }
+
+    .card {
+      padding: 18px 18px 16px;
+      border-right: 1px solid var(--line);
+    }
+
+    .card:last-child {
+      border-right: 0;
+    }
+
+    .stat-label {
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .stat-value {
+      font-family: var(--serif);
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(260px, 1.7fr) repeat(3, minmax(150px, 0.8fr)) auto;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 16px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: var(--paper-soft);
+      box-shadow: var(--shadow);
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .control {
+      width: 100%;
+      height: 42px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      background: #ffffff;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .control:focus {
+      border-color: var(--accent);
+      box-shadow: inset 0 0 0 1px var(--accent);
+    }
+
+    .reset-btn {
+      height: 42px;
+      padding: 0 16px;
+      border: 1px solid var(--ink);
+      border-radius: 0;
+      background: var(--ink);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: background 0.18s ease, color 0.18s ease;
+    }
+
+    .reset-btn:hover {
+      background: #ffffff;
+      color: var(--ink);
+    }
+
+    .table-panel {
+      border: 1px solid var(--line-strong);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .table-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      flex-wrap: wrap;
+      background: #fbfbf9;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      max-height: 72vh;
+    }
+
+    table {
+      width: 100%;
+      min-width: 1680px;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line-strong);
+      background: #f6f5f1;
+      color: var(--ink-soft);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-align: left;
+      text-transform: uppercase;
+      white-space: nowrap;
+      user-select: none;
+      cursor: pointer;
+      transition: color 0.18s ease, background 0.18s ease;
+    }
+
+    thead th:hover,
+    thead th.is-active {
+      color: var(--accent);
+    }
+
+    tbody td {
+      padding: 15px 16px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      background: #ffffff;
+      color: #262621;
+      font-size: 14px;
+      line-height: 1.62;
+    }
+
+    tbody tr:nth-child(even) td {
+      background: #fcfcfa;
+    }
+
+    tbody tr:hover td {
+      background: #f7f9fc;
+    }
+
+    th:first-child,
+    td:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      background-clip: padding-box;
+    }
+
+    thead th:first-child {
+      z-index: 4;
+      background: #f6f5f1;
+    }
+
+    tbody td:first-child {
+      background: inherit;
+      box-shadow: 10px 0 18px rgba(255, 255, 255, 0.92);
+    }
+
+    .crop {
+      display: inline-block;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+
+    .chip {
+      display: inline-block;
+      padding: 3px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fafaf8;
+      color: #414139;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.45;
+      white-space: nowrap;
+    }
+
+    .title-link {
+      display: inline-block;
+      color: var(--accent);
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .title-link:hover {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .link-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .link-btn {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0 10px;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      background: #ffffff;
+      color: var(--ink-soft);
+      font-size: 12px;
+      font-weight: 700;
+      transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
+    }
+
+    .link-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .empty {
+      display: none;
+      padding: 28px 20px 32px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.7;
+      background: #fcfcfa;
+    }
+
+    .footer-note {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: right;
+    }
+
+    @media (max-width: 1180px) {
+      .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .card:nth-child(2) {
+        border-right: 0;
+      }
+
+      .card:nth-child(-n + 2) {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .reset-btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .wrap {
+        padding: 18px 12px 28px;
+      }
+
+      .hero h1 {
+        font-size: 28px;
+      }
+
+      .stats,
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .card:last-child {
+        border-bottom: 0;
+      }
+
+      .table-meta {
+        padding: 12px 14px;
+      }
+
+      th:first-child,
+      td:first-child {
+        position: static;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="eyebrow">Research resource</div>
+      <h1>Plant Single-Cell Research Reference Table</h1>
+      <p>
+        An interactive reference table for browsing plant single-cell studies across crops, journals, technologies, samples, research objectives, and linked publications.
+      </p>
+    </section>
+
+    <section class="stats">
+      <div class="card">
+        <div class="stat-label">Records</div>
+        <div class="stat-value" id="stat-records">0</div>
+      </div>
+      <div class="card">
+        <div class="stat-label">Crops</div>
+        <div class="stat-value" id="stat-crops">0</div>
+      </div>
+      <div class="card">
+        <div class="stat-label">Journals</div>
+        <div class="stat-value" id="stat-journals">0</div>
+      </div>
+      <div class="card">
+        <div class="stat-label">Visible Results</div>
+        <div class="stat-value" id="stat-results">0</div>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <div class="field">
+        <label for="search">Keyword Search</label>
+        <input class="control" id="search" type="search" placeholder="Search crops, journals, titles, technologies, objectives, keywords, or features" />
+      </div>
+      <div class="field">
+        <label for="cropFilter">Crop</label>
+        <select class="control" id="cropFilter"></select>
+      </div>
+      <div class="field">
+        <label for="journalFilter">Journal</label>
+        <select class="control" id="journalFilter"></select>
+      </div>
+      <div class="field">
+        <label for="yearFilter">Year</label>
+        <select class="control" id="yearFilter"></select>
+      </div>
+      <button class="reset-btn" id="resetBtn" type="button">Reset Filters</button>
+    </section>
+
+    <section class="table-panel">
+      <div class="table-meta">
+        <div id="resultSummary">Loading data...</div>
+        <div class="muted">Click a column header to sort</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th data-key="Crop">Crop</th>
+              <th data-key="Year">Year</th>
+              <th data-key="Journal">Journal</th>
+              <th data-key="Article Title">Article Title</th>
+              <th data-key="Platform/Technology">Platform / Technology</th>
+              <th data-key="Sample">Sample</th>
+              <th data-key="Research Objective">Research Objective</th>
+              <th data-key="Key Features">Key Features</th>
+              <th data-key="Keywords">Keywords</th>
+              <th data-key="Reference Link">Reference</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+      <div id="emptyState" class="empty">No matching results found. Try a different keyword or filter.</div>
+    </section>
+
+    <div class="footer-note">Source: surface1.xlsx</div>
+  </div>
+
+  <script>
+    const data = [{"Crop": "Glycine max", "Year": 2023, "Journal": "Nature Plants", "Article Title": "Integrated single-nucleus and spatial transcriptomics captures transitional states in soybean nodules", "Platform/Technology": "snRNA-seq + spatial transcriptomics", "Sample": "Nodules (including roots)", "Research Objective": "Characterize cell states and transitional states in soybean nodules", "Key Features": "A landmark study integrating single-nucleus and spatial data in soybean nodules, directly supporting symbiotic nitrogen fixation research", "Keywords": "Soybean; nodules; spatial transcriptomics; single-nucleus RNA-seq; symbiotic nitrogen fixation", "Reference Link": "https://www.nature.com/articles/s41477-023-01387-z"}, {"Crop": "Glycine max", "Year": 2024, "Journal": "Developmental Cell", "Article Title": "Soybean symbiotic-nodule zonation and cell differentiation are defined by NIN2 signaling and GH3-dependent auxin homeostasis", "Platform/Technology": "Single-cell/single-nucleus-resolution developmental analysis", "Sample": "Developing nodules", "Research Objective": "Dissect soybean nodule zonation and cell differentiation mechanisms", "Key Features": "Directly links nodule zonation with NIN2 and GH3-dependent auxin homeostasis mechanisms", "Keywords": "Soybean; nodules; zonation; cell differentiation; NIN2; auxin", "Reference Link": "https://www.sciencedirect.com/science/article/pii/S1534580724004246"}, {"Crop": "Glycine max", "Year": 2024, "Journal": "Plant Communications", "Article Title": "Single-cell transcriptome atlases of soybean root and mature nodule reveal new regulatory programs that control the nodulation process", "Platform/Technology": "sNucRNA-seq + Molecular Cartography", "Sample": "Roots and mature nodules", "Research Objective": "Build cell atlases of roots and mature nodules and uncover regulatory programs controlling nodulation", "Key Features": "Highlights cell heterogeneity in the infection zone of mature nodules and identifies new regulators of nodulation", "Keywords": "Soybean; roots; nodules; single-nucleus RNA-seq; Molecular Cartography; nodulation", "Reference Link": "https://www.sciencedirect.com/science/article/pii/S259034622400292X"}, {"Crop": "Glycine max", "Year": 2025, "Journal": "Cell", "Article Title": "A spatially resolved multi-omic single-cell atlas of soybean development", "Platform/Technology": "Spatial multi-omics + single-cell genomics", "Sample": "10 major tissues; 103 cell types", "Research Objective": "Build a spatially resolved multi-omic single-cell atlas covering the full course of soybean development", "Key Features": "Covers both expression and chromatin layers, making it a milestone resource for soybean single-cell research", "Keywords": "Soybean; spatial multi-omics; single-cell; developmental atlas; chromatin", "Reference Link": "https://doi.org/10.1016/j.cell.2024.10.050"}, {"Crop": "Glycine max", "Year": 2025, "Journal": "Molecular Plant", "Article Title": "A large-scale integrated transcriptomic atlas for soybean organ development", "Platform/Technology": "bulk RNA-seq + snRNA-seq + Stereo-seq", "Sample": "314 samples; roots, nodules, shoot apices, leaves, stems, etc.", "Research Objective": "Integrate multi-level transcriptomes to build an organ development atlas", "Key Features": "Three-level integration of bulk, single-cell, and spatial data, balancing resource value and breeding applications", "Keywords": "Soybean; organ development; integrated transcriptomics; single-nucleus RNA-seq; Stereo-seq", "Reference Link": "https://www.sciencedirect.com/science/article/pii/S1674205225000693"}, {"Crop": "Glycine max", "Year": 2025, "Journal": "Plant Communications", "Article Title": "Single-nucleus multi-omics reveals the impact of drought stress on the soybean endosperm", "Platform/Technology": "single-nucleus multi-omics", "Sample": "Endosperm; drought stress", "Research Objective": "Dissect the impact of drought on soybean endosperm development and regulatory networks", "Key Features": "Extends single-cell multi-omics to stress conditions in grain endosperm", "Keywords": "Soybean; endosperm; drought; single-nucleus multi-omics", "Reference Link": "https://www.sciencedirect.com/science/article/pii/S2590346225002573"}, {"Crop": "Hordeum vulgare", "Year": 2023, "Journal": "Nucleic Acids Research", "Article Title": "Spatially resolved transcriptomic analysis of the germinating barley grain", "Platform/Technology": "spatial transcriptomics", "Sample": "Germinating grain", "Research Objective": "Characterize sub-tissue-level spatial expression during barley grain germination", "Key Features": "Reveals the spatial distribution of 14,000+ differentially expressed genes during early germination", "Keywords": "Barley; grain germination; spatial transcriptomics; sub-tissue", "Reference Link": "https://doi.org/10.1093/nar/gkad521"}, {"Crop": "Hordeum vulgare", "Year": 2026, "Journal": "Nature Plants", "Article Title": "Imputation integrates single-cell and spatial gene expression data to resolve transcriptional networks in barley shoot meristem development", "Platform/Technology": "scRNA-seq + spatial expression + imputation", "Sample": "Shoot meristem / tissues associated with floral organ initiation", "Research Objective": "Integrate single-cell and spatial data to dissect developmental networks in the barley shoot apex and floral organs", "Key Features": "Uses imputation-based integration to fill in spatial information, making it suitable for dissecting complex meristem development", "Keywords": "Barley; shoot apical meristem; spatial integration; single-cell; transcriptional networks", "Reference Link": "https://www.nature.com/articles/s41477-025-02176-6"}, {"Crop": "Triticum aestivum", "Year": 2025, "Journal": "Cell Reports", "Article Title": "A single-cell and spatial wheat root atlas with cross-species reference mapping", "Platform/Technology": "scRNA-seq + spatial transcriptomics", "Sample": "Soil-grown root tips/root meristem", "Research Objective": "Build a single-cell and spatial atlas of wheat roots and enable cross-species annotation transfer", "Key Features": "Particularly suitable for cell-type annotation in complex polyploid crops such as wheat", "Keywords": "Wheat; roots; single-cell; spatial transcriptomics; cross-species annotation", "Reference Link": "https://www.sciencedirect.com/science/article/pii/S2211124725000117"}, {"Crop": "Triticum aestivum", "Year": 2025, "Journal": "Genome Biology", "Article Title": "Spatial and single-cell expression analyses reveal complex expression domains during early wheat spike development", "Platform/Technology": "smFISH + scRNA-seq", "Sample": "Early spike development stages (W1.5/W2.5/W3.5)", "Research Objective": "Characterize spatial expression domains and single-cell clusters during early wheat spike development", "Key Features": "Spatial localization of 48,225 cells and 99 genes, providing a key resource for early wheat spike spatial mapping", "Keywords": "Wheat; spike development; smFISH; single-cell; spatial expression domains", "Reference Link": "https://link.springer.com/article/10.1186/s13059-025-03811-3"}, {"Crop": "Triticum aestivum", "Year": 2025, "Journal": "Molecular Plant", "Article Title": "A Single-Cell-Resolution Spatial Transcriptomic Atlas Decodes Wheat Spike Development and Yield Potential", "Platform/Technology": "Single-cell-resolution spatial transcriptomics", "Sample": "Five key spike developmental stages", "Research Objective": "Systematically dissect spatial transcriptional regulation associated with spike development and yield potential", "Key Features": "Directly oriented toward yield formation, highlighting spatial division of labor among cell types and hormone/metabolic pathways", "Keywords": "Wheat; spike; spatial transcriptomics; single-cell resolution; yield potential", "Reference Link": "https://www.sciencedirect.com/science/article/pii/S1674205225004502"}, {"Crop": "Triticum aestivum", "Year": 2025, "Journal": "The Plant Cell", "Article Title": "Spatial transcriptomics reveals expression gradients in developing wheat spikes", "Platform/Technology": "MERFISH/spatial transcriptomics", "Sample": "Developing spikes", "Research Objective": "Map spatial expression gradients during spike and spikelet formation", "Key Features": "Identifies 50,000 cells and 18 expression domains, highlighting differences along the apical-basal axis and tissue hierarchy", "Keywords": "Wheat; spike; spatial gradients; spatial transcriptomics; expression domains", "Reference Link": "https://academic.oup.com/plcell/article/38/1/koaf282/8379514"}, {"Crop": "Gossypium hirsutum", "Year": 2022, "Journal": "Plant Biotechnology Journal", "Article Title": "Single-cell RNA-seq reveals fate determination control of an individual fiber cell initiation in cotton (Gossypium hirsutum)", "Platform/Technology": "scRNA-seq", "Sample": "Ovules/fiber initiation cells", "Research Objective": "Dissect initiation and fate determination of individual fiber cells", "Key Features": "Cotton fiber serves as a single-cell model directly linked to fiber yield formation", "Keywords": "Cotton; fiber cells; fate determination; ovules; single-cell", "Reference Link": "https://doi.org/10.1111/pbi.13918"}, {"Crop": "Gossypium arboreum / Gossypium spp.", "Year": 2024, "Journal": "Plant Communications", "Article Title": "Transcriptional landscape of cotton roots in response to salt stress at single-cell resolution", "Platform/Technology": "scRNA-seq", "Sample": "Root tips/salt stress", "Research Objective": "Characterize cell-type-specific responses of cotton roots to salt stress", "Key Features": "Highlights root cell heterogeneity and differentiation trajectories under stress", "Keywords": "Cotton; roots; salt stress; single-cell; differentiation trajectories", "Reference Link": "https://doi.org/10.1016/j.xplc.2023.100740"}, {"Crop": "Oryza sativa", "Year": 2021, "Journal": "Molecular Plant", "Article Title": "Transcriptional landscape of rice roots at the single-cell resolution", "Platform/Technology": "scRNA-seq", "Sample": "Root", "Research Objective": "Build a single-cell transcriptomic atlas of rice roots", "Key Features": "An early landmark crop-root single-cell atlas that provides a benchmark for subsequent comparisons in rice and grasses", "Keywords": "Rice; roots; single-cell; cell atlas", "Reference Link": "https://doi.org/10.1016/j.molp.2020.12.014"}, {"Crop": "Oryza sativa", "Year": 2021, "Journal": "Nature Communications", "Article Title": "Single-Cell Transcriptome Atlas and Chromatin Accessibility Landscape Reveal Differentiation Trajectories in the Rice Root", "Platform/Technology": "scRNA-seq + chromatin accessibility", "Sample": "Root", "Research Objective": "Integrate transcriptomic and chromatin layers to dissect root cell differentiation trajectories", "Key Features": "Links cell states with epigenetic regulation and is a foundational multi-omics single-cell paper for rice roots", "Keywords": "Rice; roots; single-cell; ATAC; differentiation trajectories", "Reference Link": "https://www.nature.com/articles/s41467-021-22352-4"}, {"Crop": "Oryza sativa", "Year": 2023, "Journal": "Developmental Cell", "Article Title": "Single-nucleus sequencing deciphers developmental trajectories in rice pistils", "Platform/Technology": "snRNA-seq", "Sample": "Pistils/ovary-related tissues", "Research Objective": "Characterize developmental trajectories of rice pistils", "Key Features": "Extends single-cell analysis to reproductive organ development", "Keywords": "Rice; pistils; single-nucleus RNA-seq; developmental trajectories", "Reference Link": "https://doi.org/10.1016/j.devcel.2023.03.004"}, {"Crop": "Oryza sativa", "Year": 2025, "Journal": "Nature", "Article Title": "A single-cell multi-omics atlas of rice", "Platform/Technology": "Single-cell multi-omics (RNA + chromatin accessibility)", "Sample": "Eight organs; 116,564 cells", "Research Objective": "Build a panoramic single-cell multi-omics atlas of rice", "Key Features": "Covers multiple organs and provides both transcriptomic and chromatin information, making it a milestone resource for rice single-cell research", "Keywords": "Rice; multi-omics; single-cell; organ atlas; RNA; ATAC", "Reference Link": "https://www.nature.com/articles/s41586-025-09251-0"}, {"Crop": "Oryza sativa", "Year": 2025, "Journal": "Nature Plants", "Article Title": "A single-cell rice atlas integrates multi-species data to reveal cis-regulatory evolution", "Platform/Technology": "Single-cell/single-nucleus atlas + cross-species integration", "Sample": "Centered on rice and integrating multi-species data", "Research Objective": "Use cross-species integration to dissect cis-regulatory evolution in rice and grasses", "Key Features": "Balances a rice atlas with cross-grass comparisons and can indirectly complement sorghum/Setaria comparative analyses", "Keywords": "Rice; cross-species; cis-regulatory evolution; grasses; single-cell", "Reference Link": "https://www.nature.com/articles/s41477-025-02106-6"}, {"Crop": "Zea mays", "Year": 2020, "Journal": "PNAS", "Article Title": "Plant stem-cell organization and differentiation at single-cell resolution", "Platform/Technology": "scRNA-seq", "Sample": "Shoot apical meristem (SAM)/seedling shoot apex", "Research Objective": "Characterize stem-cell organization and differentiation trajectories in the maize shoot apex", "Key Features": "Establishes a SAM cell atlas and reveals stem-cell niche and early organ-initiation-associated cell states", "Keywords": "Maize; SAM; stem cells; differentiation trajectories; scRNA-seq", "Reference Link": "https://pubmed.ncbi.nlm.nih.gov/33318187/"}, {"Crop": "Zea mays", "Year": 2021, "Journal": "Cell", "Article Title": "A cis-regulatory atlas in maize at single-cell resolution", "Platform/Technology": "Single-cell/single-nucleus regulatory atlas (cis-regulatory atlas)", "Sample": "Atlas of regulatory elements across multiple maize cell types/tissues", "Research Objective": "Build a single-cell-resolution cis-regulatory atlas in maize", "Key Features": "Explains gene expression and complex trait regulation from a cell-type-specific cis-regulatory perspective", "Keywords": "Maize; cis-regulation; chromatin; single-cell; regulatory atlas", "Reference Link": "https://pubmed.ncbi.nlm.nih.gov/34855479/"}, {"Crop": "Zea mays", "Year": 2021, "Journal": "Developmental Cell", "Article Title": "Single-cell RNA sequencing of developing maize ears facilitates functional analysis and trait candidate gene discovery", "Platform/Technology": "scRNA-seq", "Sample": "Developing maize ears/young ears", "Research Objective": "Build a single-cell atlas of young ears and use it for trait candidate gene discovery", "Key Features": "Links cell types and developmental trajectories to agronomic trait candidate genes, with both fundamental and breeding value", "Keywords": "Maize; young ear; ear; single-cell; candidate genes; trait discovery", "Reference Link": "https://pubmed.ncbi.nlm.nih.gov/33964211/"}, {"Crop": "Zea mays", "Year": 2021, "Journal": "Science", "Article Title": "Ground tissue circuitry regulates organ complexity in maize and Setaria", "Platform/Technology": "Single-cell transcriptomics + comparative developmental analysis", "Sample": "Maize and Setaria roots/cortex tissues", "Research Objective": "Compare cellular circuits and regulatory mechanisms underlying ground tissue complexity in grass roots", "Key Features": "Based on the maize root single-cell atlas, combines Setaria mutants and comparative analysis to explain cortex layer expansion", "Keywords": "Maize; Setaria; comparative single-cell; ground tissue; organ complexity; C4", "Reference Link": "https://doi.org/10.1126/science.abj2327"}, {"Crop": "Zea mays", "Year": 2023, "Journal": "Plant Biotechnology Journal", "Article Title": "Single-cell RNA sequencing profiles reveal cell type-specific transcriptional regulation networks conditioning fungal invasion in maize roots", "Platform/Technology": "scRNA-seq", "Sample": "Roots; pathogenic fungal infection conditions", "Research Objective": "Dissect cell-type-specific response networks in maize roots under fungal infection", "Key Features": "Applies single-cell atlases to disease-root interactions and disease-resistance mechanism studies", "Keywords": "Maize; roots; fungal infection; cell-type-specific; disease resistance; scRNA-seq", "Reference Link": "https://pubmed.ncbi.nlm.nih.gov/37349934/"}, {"Crop": "Zea mays", "Year": 2023, "Journal": "Plant Communications", "Article Title": "Single-cell RNA sequencing reveals the landscape of maize root tips and assists root-related crop trait improvement", "Platform/Technology": "scRNA-seq", "Sample": "Root tips", "Research Objective": "Build a single-cell atlas of root tips to support root trait improvement", "Key Features": "Emphasizes applications for improving root-related agronomic traits", "Keywords": "Maize; root tips; single-cell; root improvement; breeding", "Reference Link": "https://pubmed.ncbi.nlm.nih.gov/37142751/"}, {"Crop": "Zea mays", "Year": 2023, "Journal": "The Plant Cell", "Article Title": "The maize single-nucleus transcriptome comprehensively describes signaling networks governing stomatal development and leaf physiology", "Platform/Technology": "snRNA-seq", "Sample": "Leaf cells related to stomatal development", "Research Objective": "Dissect cell-type-specific signaling networks governing maize leaf and stomatal development", "Key Features": "Focuses on leaf physiology and stomatal lineages, with direct relevance to stress resilience and photosynthetic efficiency research", "Keywords": "Maize; leaves; stomata; single-nucleus RNA-seq; signaling networks", "Reference Link": "https://pubmed.ncbi.nlm.nih.gov/37165193/"}, {"Crop": "Zea mays", "Year": 2024, "Journal": "Nature Communications", "Article Title": "Decoding the gene regulatory network of endosperm differentiation in maize", "Platform/Technology": "Single-cell/single-nucleus transcriptomics + regulatory network analysis", "Sample": "Endosperm", "Research Objective": "Dissect gene regulatory networks of maize endosperm differentiation", "Key Features": "Focuses on grain filling and endosperm cell fate, directly supporting foundational research on yield formation", "Keywords": "Maize; endosperm; gene regulatory network; single-cell; grain development", "Reference Link": "https://www.nature.com/articles/s41467-023-44369-7"}, {"Crop": "Zea mays", "Year": 2024, "Journal": "Nature Plants", "Article Title": "A spatial transcriptome map of the developing maize ear", "Platform/Technology": "Stereo-seq / spatial transcriptomics", "Sample": "Developing maize ear primordia/young ears", "Research Objective": "Build a spatial transcriptomic atlas of young maize ears", "Key Features": "Defines 12 cell types spatially and identifies new meristem-associated cell types", "Keywords": "Maize; spatial transcriptomics; young ears; Stereo-seq; meristem", "Reference Link": "https://www.nature.com/articles/s41477-024-01683-2"}, {"Crop": "Zea mays", "Year": 2024, "Journal": "Plant Biotechnology Journal", "Article Title": "Single-cell RNA sequencing reveals a key regulator ZmEREB14 affecting shoot apex development and yield formation in maize", "Platform/Technology": "scRNA-seq", "Sample": "Shoot apical meristem (SAM)", "Research Objective": "Identify key regulators affecting shoot apex development and yield formation", "Key Features": "Moves from a single-cell atlas to the functional gene ZmEREB14, highlighting the linkage between development and yield", "Keywords": "Maize; shoot apex; SAM; ZmEREB14; yield formation; single-cell", "Reference Link": "https://doi.org/10.1111/pbi.14537"}, {"Crop": "Zea mays", "Year": 2025, "Journal": "Nature Communications", "Article Title": "Single-cell transcriptomes reveal spatiotemporal heat stress response in maize roots", "Platform/Technology": "scRNA-seq", "Sample": "Roots; heat stress treatment", "Research Objective": "Dissect the spatiotemporal single-cell response of maize roots to heat stress", "Key Features": "Reveals the cortex as a key heat-responsive cell type and provides candidate markers for heat-tolerance improvement", "Keywords": "Maize; roots; heat stress; spatiotemporal response; single-cell", "Reference Link": "https://www.nature.com/articles/s41467-024-55485-3"}, {"Crop": "Zea mays", "Year": 2025, "Journal": "Science", "Article Title": "The genetic architecture of cell type-specific cis regulation in maize", "Platform/Technology": "Large-scale single-cell genomics / single-cell regulatory genetics", "Sample": "172 maize inbred lines; >0.7 million nuclei", "Research Objective": "Dissect the genetic basis of cell-type-specific cis-regulatory variation", "Key Features": "Connects population genetic variation with cell-type-specific regulation, representing a landmark study for crop single-cell breeding", "Keywords": "Maize; cell-type-specific; cis-regulation; population; single-cell genomics", "Reference Link": "https://doi.org/10.1126/science.ads6601"}];
+
+    const searchInput = document.getElementById("search");
+    const cropFilter = document.getElementById("cropFilter");
+    const journalFilter = document.getElementById("journalFilter");
+    const yearFilter = document.getElementById("yearFilter");
+    const tableBody = document.getElementById("tableBody");
+    const emptyState = document.getElementById("emptyState");
+    const resultSummary = document.getElementById("resultSummary");
+    const resetBtn = document.getElementById("resetBtn");
+    const statRecords = document.getElementById("stat-records");
+    const statCrops = document.getElementById("stat-crops");
+    const statJournals = document.getElementById("stat-journals");
+    const statResults = document.getElementById("stat-results");
+    const headers = Array.from(document.querySelectorAll("th[data-key]"));
+
+    let sortKey = "Crop";
+    let sortAsc = true;
+
+    function uniqueValues(key) {
+      return [...new Set(data.map((item) => item[key]).filter(Boolean))].sort((a, b) =>
+        String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" })
+      );
+    }
+
+    function fillSelect(selectEl, values, label) {
+      selectEl.innerHTML =
+        `<option value="">All ${label}</option>` +
+        values.map((value) => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join("");
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function matches(item, keyword) {
+      if (!keyword) return true;
+      const text = Object.values(item).join(" ").toLowerCase();
+      return text.includes(keyword.toLowerCase());
+    }
+
+    function compareText(a, b) {
+      return String(a || "").localeCompare(String(b || ""), undefined, {
+        numeric: true,
+        sensitivity: "base"
+      });
+    }
+
+    function getFilteredData() {
+      const keyword = searchInput.value.trim();
+      const crop = cropFilter.value;
+      const journal = journalFilter.value;
+      const year = yearFilter.value;
+
+      const filtered = data.filter((item) => {
+        return (
+          matches(item, keyword) &&
+          (!crop || item["Crop"] === crop) &&
+          (!journal || item["Journal"] === journal) &&
+          (!year || String(item["Year"]) === year)
+        );
+      });
+
+      filtered.sort((left, right) => {
+        const result = compareText(left[sortKey], right[sortKey]);
+        return sortAsc ? result : -result;
+      });
+
+      return filtered;
+    }
+
+    function updateHeaderState() {
+      headers.forEach((header) => {
+        const isActive = header.dataset.key === sortKey;
+        header.classList.toggle("is-active", isActive);
+        const arrow = isActive ? (sortAsc ? " ↑" : " ↓") : "";
+        header.textContent = header.dataset.label + arrow;
+      });
+    }
+
+    function renderTable() {
+      const filtered = getFilteredData();
+      statResults.textContent = filtered.length;
+      resultSummary.textContent = `Showing ${filtered.length} of ${data.length} records`;
+
+      if (!filtered.length) {
+        tableBody.innerHTML = "";
+        emptyState.style.display = "block";
+        updateHeaderState();
+        return;
+      }
+
+      emptyState.style.display = "none";
+      tableBody.innerHTML = filtered
+        .map((item) => {
+          const url = item["Reference Link"] || "";
+          const articleTitle = item["Article Title"] || "—";
+          const linkedTitle = url
+            ? `<a class="title-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(articleTitle)}</a>`
+            : `<span>${escapeHtml(articleTitle)}</span>`;
+
+          const refCell = url
+            ? `<div class="link-actions"><a class="link-btn" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Open Link</a></div>`
+            : '<span class="muted">No link</span>';
+
+          return `
+            <tr>
+              <td><span class="crop">${escapeHtml(item["Crop"] || "—")}</span></td>
+              <td><span class="chip">${escapeHtml(item["Year"] || "—")}</span></td>
+              <td>${escapeHtml(item["Journal"] || "—")}</td>
+              <td>${linkedTitle}</td>
+              <td>${escapeHtml(item["Platform/Technology"] || "—")}</td>
+              <td>${escapeHtml(item["Sample"] || "—")}</td>
+              <td>${escapeHtml(item["Research Objective"] || "—")}</td>
+              <td>${escapeHtml(item["Key Features"] || "—")}</td>
+              <td>${escapeHtml(item["Keywords"] || "—")}</td>
+              <td>${refCell}</td>
+            </tr>
+          `;
+        })
+        .join("");
+
+      updateHeaderState();
+    }
+
+    headers.forEach((header) => {
+      header.dataset.label = header.textContent.trim();
+      header.addEventListener("click", () => {
+        const key = header.dataset.key;
+        if (sortKey === key) {
+          sortAsc = !sortAsc;
+        } else {
+          sortKey = key;
+          sortAsc = true;
+        }
+        renderTable();
+      });
+    });
+
+    [searchInput, cropFilter, journalFilter, yearFilter].forEach((element) => {
+      element.addEventListener("input", renderTable);
+      element.addEventListener("change", renderTable);
+    });
+
+    resetBtn.addEventListener("click", () => {
+      searchInput.value = "";
+      cropFilter.value = "";
+      journalFilter.value = "";
+      yearFilter.value = "";
+      sortKey = "Crop";
+      sortAsc = true;
+      renderTable();
+    });
+
+    fillSelect(cropFilter, uniqueValues("Crop"), "Crop");
+    fillSelect(journalFilter, uniqueValues("Journal"), "Journal");
+    fillSelect(yearFilter, uniqueValues("Year"), "Year");
+
+    statRecords.textContent = data.length;
+    statCrops.textContent = uniqueValues("Crop").length;
+    statJournals.textContent = uniqueValues("Journal").length;
+    renderTable();
+  </script>
+</body>
+</html>
